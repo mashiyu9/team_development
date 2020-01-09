@@ -1,6 +1,6 @@
 class TeamsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_team, only: %i[show edit update destroy]
+  before_action :set_team, only: %i[show edit update destroy change_owner]
 
   def index
     @teams = Team.all
@@ -30,6 +30,7 @@ class TeamsController < ApplicationController
   end
 
   def update
+    @team.owner_id = params[:user_id]
     if @team.update(team_params)
       redirect_to @team, notice: I18n.t('views.messages.update_team')
     else
@@ -37,6 +38,19 @@ class TeamsController < ApplicationController
       render :edit
     end
   end
+
+  def change_owner
+    if current_user.id == @team.owner_id
+      @team.owner_id = params[:user_id]
+      @team.update(team_params)
+      TeamMailer.change_owner_email(@team).deliver_now
+      redirect_to @team, notice: "チームリーダーを変更しました"
+    else
+      flash.now[:error] = I18n.t('views.messages.failed_to_save_team')
+      redirect_to @team, notice: "チームリーダーを変更できませんでした"
+    end
+  end
+
 
   def destroy
     @team.destroy

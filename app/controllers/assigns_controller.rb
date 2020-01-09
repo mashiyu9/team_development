@@ -19,6 +19,13 @@ class AssignsController < ApplicationController
     redirect_to team_url(params[:team_id]), notice: destroy_message
   end
 
+  # def change
+  #   change = Assign.find(params[:id])
+  #   change.team.owner_id = change.user_id
+  #   change.team.update
+  #   redirect_to team_url(params[:team_id]), notice: "change owner"
+  # end
+
   private
 
   def assign_params
@@ -37,11 +44,11 @@ class AssignsController < ApplicationController
       I18n.t('views.messages.cannot_delete_member_4_some_reason')
     end
   end
-  
+
   def email_reliable?(address)
     address.match(/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i)
   end
-  
+
   def set_next_team(assign, assigned_user)
     another_team = Assign.find_by(user_id: assigned_user.id).team
     change_keep_team(assigned_user, another_team) if assigned_user.keep_team_id == assign.team_id
