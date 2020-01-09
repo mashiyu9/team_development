@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'statics#top'
   get :dashboard, to: 'teams#dashboard'
-  get :change, to: 'assigns#change'
+  patch :change_owner, to: 'teams#change_owner'
 
   devise_for :users, controllers: {
     sessions: 'users/sessions',

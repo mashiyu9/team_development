@@ -14,17 +14,17 @@ class AssignsController < ApplicationController
 
   def destroy
     assign = Assign.find(params[:id])
-    binding.irb
-    destroy_message = assign_destrjoy(assign, assign.user)
-    binding.irb
+    destroy_message = assign_destroy(assign, assign.user)
 
     redirect_to team_url(params[:team_id]), notice: destroy_message
   end
 
-  def change
-    change = Assign.find(params[:id])
-
-  end
+  # def change
+  #   change = Assign.find(params[:id])
+  #   change.team.owner_id = change.user_id
+  #   change.team.update
+  #   redirect_to team_url(params[:team_id]), notice: "change owner"
+  # end
 
   private
 
